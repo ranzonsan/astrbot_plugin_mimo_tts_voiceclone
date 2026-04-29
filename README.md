@@ -4,6 +4,9 @@
 
 MiMo 正在进行**百万亿 Token 创造者激励计划**（申请网址：[https://100t.xiaomimimo.com](https://100t.xiaomimimo.com)），2026/04/28 - 2026/05/28 期间，可**免费领取** 200M - 1600M 额度，尽情使用 Mimo-v2.5-tts-voiceclone 的声音克隆功能吧 ~
 
+> ✳ 本插件不依赖 AstrBot 的 TTS 功能，无需额外配置 AstrBot 本体中的 TTS 相关设置。<br>
+> ⚠ 免责声明：本项目仅包含 mimo-v2.5-tts 的 API 调用，功能与 MiMo 官方网页相同，请勿用于非法和不正当的用途。
+
 ## 功能特性
 
 - 支持用户上传参考音频进行声音克隆
