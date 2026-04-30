@@ -24,10 +24,43 @@
   },
   "reference_audio": {
     "type": "file",
-    "description": "参考音频文件",
+    "description": "默认参考声音文件",
     "default": [],
     "file_types": ["wav", "mp3", "flac", "ogg"],
-    "hint": "上传用于声音克隆的参考音频文件，支持 WAV、MP3、FLAC、OGG 格式"
+    "hint": "机器人使用的默认参考音频。支持 WAV、MP3、FLAC、OGG 格式"
+  },
+  "bot_reference_audio_files": {
+    "type": "file",
+    "description": "[可选] 多机器人参考声音文件池",
+    "default": [],
+    "file_types": ["wav", "mp3", "flac", "ogg"],
+    "hint": "[当需要为多个机器人指定不同声音时使用]\n先在这里上传所有机器人的专属参考声音，再在下面的列表中用文件名绑定机器人 ID。"
+  },
+  "bot_reference_audios": {
+    "type": "template_list",
+    "description": "[可选] 按机器人 ID 指定参考声音",
+    "default": [],
+    "hint": "[当需要为多个机器人指定不同声音时使用]\n仅对 aiocqhttp/OneBot v11 生效。点击新增后，填写对应的机器人 ID，与上方文件池中已上传的文件名。",
+    "templates": {
+      "bot_reference_audio": {
+        "name": "机器人参考声音",
+        "hint": "为一个机器人 ID 绑定文件池中的专属参考音频",
+        "items": {
+          "bot_id": {
+            "description": "机器人的 ID",
+            "type": "string",
+            "default": "",
+            "hint": "AstrBot 消息对象中的 self_id。OneBot v11 通常为机器人 QQ 号。"
+          },
+          "reference_audio_filename": {
+            "description": "该机器人调用的参考声音文件名",
+            "type": "string",
+            "default": "",
+            "hint": "填写上方文件池中已上传文件的文件名，如 123456.wav。留空时会尝试按机器人 ID 自动匹配同名文件。"
+          }
+        }
+      }
+    }
   },
   "model_name": {
     "description": "TTS 模型名称",
