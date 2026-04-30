@@ -1,8 +1,8 @@
-# astrbot_plugin_mimo_tts_voiceclone
+# MiMo TTS 声音克隆插件
 
-基于小米 Mimo-v2.5-tts-voiceclone 的语音克隆 TTS 插件，用于 AstrBot 聊天机器人。
+让 AstrBot 机器人学说话！基于小米 mimo-v2.5-tts-voiceclone 的语音克隆 TTS 插件
 
-可为多个机器人，配置不同的专属声音！
+💡 可为多个机器人，配置不同的专属声音！
 
 MiMo 正在进行**百万亿 Token 创造者激励计划**（申请网址：[https://100t.xiaomimimo.com](https://100t.xiaomimimo.com)）！2026/04/28 - 2026/05/28 期间，可**免费领取** 200M - 1600M 额度，尽情使用 Mimo-v2.5-tts-voiceclone 的声音克隆功能吧 ~
 
