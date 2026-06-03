@@ -1,9 +1,12 @@
 {
   "astrbot_plugin_mimo_tts_voiceclone": {
     "display_name": "小米MimoTTS音色复制",
-    "desc": "",
+    "desc": "适配小米MimoTTS音色复制模型。",
     "author": "QingchenWait,Ranzon",
     "repo": "https://github.com/ranzonsan/astrbot_plugin_mimo_tts_voiceclone",
     "tags": [
+      "Xiaomi Mimo",
+      "TTS",
+      "VoiceClone"
     ]
   }
