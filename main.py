@@ -34,129 +34,129 @@ class MimoTTSVoiceClonePlugin(Star):
         self.voice_speed = config.get("voice_speed", 1.0)
         self.max_text_length = config.get("max_text_length", 500)
         self.reference_audio_path = None
-        self.reference_audio_base64 = None
+        self.reference_audio_base64 = config.get("reference_audio_base64", "")
         self.default_reference_audio = None
         self.bot_reference_audio_files = {}
         self.bot_reference_audios = {}
 
-        self._setup_reference_audio()
-        self._setup_bot_reference_audio_files()
-        self._setup_bot_reference_audios()
+        # self._setup_reference_audio()
+        # self._setup_bot_reference_audio_files()
+        # self._setup_bot_reference_audios()
 
-    def _get_first_uploaded_file(self, file_config) -> str:
-        if isinstance(file_config, list):
-            if not file_config:
-                return ""
-            file_config = file_config[0]
-        if file_config is None:
-            return ""
-        return str(file_config).strip()
-
-    def _resolve_audio_path(self, relative_path: str) -> str:
-        return os.path.normpath(os.path.join(self.plugin_data_root, PLUGIN_NAME, relative_path))
-
-    def _get_uploaded_files(self, file_config) -> list[str]:
-        if not isinstance(file_config, list):
-            file_config = [file_config]
-        files = []
-        for item in file_config:
-            if item is None:
-                continue
-            relative_path = str(item).strip().replace("\\", "/")
-            if relative_path:
-                files.append(relative_path)
-        return files
-
-    def _load_reference_audio(self, file_config, label: str, warn_if_missing: bool = True) -> dict | None:
-        relative_path = self._get_first_uploaded_file(file_config)
-        if not relative_path:
-            if warn_if_missing:
-                logger.warning(f"[MimoTTS] 未上传{label}，声音克隆功能将不可用")
-            return None
-
-        audio_path = self._resolve_audio_path(relative_path)
-        logger.info(f"[MimoTTS] {label}相对路径: {relative_path}")
-        logger.info(f"[MimoTTS] {label}完整路径: {audio_path}")
-
-        if not os.path.exists(audio_path):
-            logger.warning(f"[MimoTTS] {label}文件不存在: {audio_path}")
-            return None
-
-        try:
-            with open(audio_path, "rb") as f:
-                audio_bytes = f.read()
-            audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
-            logger.info(f"[MimoTTS] {label}已加载并编码，大小: {len(audio_base64)} bytes")
-            return {
-                "path": audio_path,
-                "base64": audio_base64,
-                "mime_type": self._get_mime_type(audio_path),
-                "label": label,
-            }
-        except Exception as e:
-            logger.error(f"[MimoTTS] 读取{label}失败: {e}")
-            return None
-
-    def _setup_reference_audio(self):
-        self.default_reference_audio = self._load_reference_audio(
-            self.config.get("reference_audio", []),
-            "默认参考音频",
-        )
-        if self.default_reference_audio:
-            self.reference_audio_path = self.default_reference_audio["path"]
-            self.reference_audio_base64 = self.default_reference_audio["base64"]
-
-    def _setup_bot_reference_audio_files(self):
-        file_config = self.config.get("bot_reference_audio_files", [])
-        for relative_path in self._get_uploaded_files(file_config):
-            audio_info = self._load_reference_audio(relative_path, f"机器人参考声音文件 {relative_path}", False)
-            if not audio_info:
-                continue
-            filename = os.path.basename(relative_path).strip()
-            self.bot_reference_audio_files[relative_path] = audio_info
-            self.bot_reference_audio_files[filename] = audio_info
-            stem, _ = os.path.splitext(filename)
-            if stem:
-                self.bot_reference_audio_files.setdefault(stem, audio_info)
-
-        if self.bot_reference_audio_files:
-            unique_files = {info["path"] for info in self.bot_reference_audio_files.values()}
-            logger.info(f"[MimoTTS] 已加载 {len(unique_files)} 个机器人专属参考声音文件")
-
-    def _setup_bot_reference_audios(self):
-        bot_reference_audios = self.config.get("bot_reference_audios", [])
-        if not bot_reference_audios:
-            return
-        if not isinstance(bot_reference_audios, list):
-            logger.warning("[MimoTTS] 机器人专属参考音频配置不是列表，已忽略")
-            return
-
-        for index, item in enumerate(bot_reference_audios, start=1):
-            if not isinstance(item, dict):
-                logger.warning(f"[MimoTTS] 第 {index} 个机器人参考音频配置格式错误，已忽略")
-                continue
-
-            bot_id = str(item.get("bot_id", "")).strip()
-            if not bot_id:
-                logger.warning(f"[MimoTTS] 第 {index} 个机器人参考音频未填写机器人 ID，已忽略")
-                continue
-
-            audio_key = str(item.get("reference_audio_filename", "")).strip().replace("\\", "/")
-            audio_info = self.bot_reference_audio_files.get(audio_key)
-            if not audio_info and not audio_key:
-                audio_info = self.bot_reference_audio_files.get(bot_id)
-            if not audio_info and audio_key:
-                audio_info = self._load_reference_audio(audio_key, f"机器人 {bot_id} 参考音频", False)
-            if not audio_info:
-                logger.warning(f"[MimoTTS] 机器人 {bot_id} 未绑定有效参考音频，将回落默认参考音频")
-                continue
-
-            if bot_id in self.bot_reference_audios:
-                logger.warning(f"[MimoTTS] 机器人 {bot_id} 的参考音频配置重复，将使用最后一项")
-            self.bot_reference_audios[bot_id] = audio_info
-
-        if self.bot_reference_audios:
-            logger.info(f"[MimoTTS] 已加载 {len(self.bot_reference_audios)} 个机器人专属参考音频")
+    # def _get_first_uploaded_file(self, file_config) -> str:
+    #     if isinstance(file_config, list):
+    #         if not file_config:
+    #             return ""
+    #         file_config = file_config[0]
+    #     if file_config is None:
+    #         return ""
+    #     return str(file_config).strip()
+    #
+    # def _resolve_audio_path(self, relative_path: str) -> str:
+    #     return os.path.normpath(os.path.join(self.plugin_data_root, PLUGIN_NAME, relative_path))
+    #
+    # def _get_uploaded_files(self, file_config) -> list[str]:
+    #     if not isinstance(file_config, list):
+    #         file_config = [file_config]
+    #     files = []
+    #     for item in file_config:
+    #         if item is None:
+    #             continue
+    #         relative_path = str(item).strip().replace("\\", "/")
+    #         if relative_path:
+    #             files.append(relative_path)
+    #     return files
+    #
+    # def _load_reference_audio(self, file_config, label: str, warn_if_missing: bool = True) -> dict | None:
+    #     relative_path = self._get_first_uploaded_file(file_config)
+    #     if not relative_path:
+    #         if warn_if_missing:
+    #             logger.warning(f"[MimoTTS] 未上传{label}，声音克隆功能将不可用")
+    #         return None
+    #
+    #     audio_path = self._resolve_audio_path(relative_path)
+    #     logger.info(f"[MimoTTS] {label}相对路径: {relative_path}")
+    #     logger.info(f"[MimoTTS] {label}完整路径: {audio_path}")
+    #
+    #     if not os.path.exists(audio_path):
+    #         logger.warning(f"[MimoTTS] {label}文件不存在: {audio_path}")
+    #         return None
+    #
+    #     try:
+    #         with open(audio_path, "rb") as f:
+    #             audio_bytes = f.read()
+    #         audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
+    #         logger.info(f"[MimoTTS] {label}已加载并编码，大小: {len(audio_base64)} bytes")
+    #         return {
+    #             "path": audio_path,
+    #             "base64": audio_base64,
+    #             "mime_type": self._get_mime_type(audio_path),
+    #             "label": label,
+    #         }
+    #     except Exception as e:
+    #         logger.error(f"[MimoTTS] 读取{label}失败: {e}")
+    #         return None
+    #
+    # def _setup_reference_audio(self):
+    #     self.default_reference_audio = self._load_reference_audio(
+    #         self.config.get("reference_audio", []),
+    #         "默认参考音频",
+    #     )
+    #     if self.default_reference_audio:
+    #         self.reference_audio_path = self.default_reference_audio["path"]
+    #         self.reference_audio_base64 = self.default_reference_audio["base64"]
+    #
+    # def _setup_bot_reference_audio_files(self):
+    #     file_config = self.config.get("bot_reference_audio_files", [])
+    #     for relative_path in self._get_uploaded_files(file_config):
+    #         audio_info = self._load_reference_audio(relative_path, f"机器人参考声音文件 {relative_path}", False)
+    #         if not audio_info:
+    #             continue
+    #         filename = os.path.basename(relative_path).strip()
+    #         self.bot_reference_audio_files[relative_path] = audio_info
+    #         self.bot_reference_audio_files[filename] = audio_info
+    #         stem, _ = os.path.splitext(filename)
+    #         if stem:
+    #             self.bot_reference_audio_files.setdefault(stem, audio_info)
+    #
+    #     if self.bot_reference_audio_files:
+    #         unique_files = {info["path"] for info in self.bot_reference_audio_files.values()}
+    #         logger.info(f"[MimoTTS] 已加载 {len(unique_files)} 个机器人专属参考声音文件")
+    #
+    # def _setup_bot_reference_audios(self):
+    #     bot_reference_audios = self.config.get("bot_reference_audios", [])
+    #     if not bot_reference_audios:
+    #         return
+    #     if not isinstance(bot_reference_audios, list):
+    #         logger.warning("[MimoTTS] 机器人专属参考音频配置不是列表，已忽略")
+    #         return
+    #
+    #     for index, item in enumerate(bot_reference_audios, start=1):
+    #         if not isinstance(item, dict):
+    #             logger.warning(f"[MimoTTS] 第 {index} 个机器人参考音频配置格式错误，已忽略")
+    #             continue
+    #
+    #         bot_id = str(item.get("bot_id", "")).strip()
+    #         if not bot_id:
+    #             logger.warning(f"[MimoTTS] 第 {index} 个机器人参考音频未填写机器人 ID，已忽略")
+    #             continue
+    #
+    #         audio_key = str(item.get("reference_audio_filename", "")).strip().replace("\\", "/")
+    #         audio_info = self.bot_reference_audio_files.get(audio_key)
+    #         if not audio_info and not audio_key:
+    #             audio_info = self.bot_reference_audio_files.get(bot_id)
+    #         if not audio_info and audio_key:
+    #             audio_info = self._load_reference_audio(audio_key, f"机器人 {bot_id} 参考音频", False)
+    #         if not audio_info:
+    #             logger.warning(f"[MimoTTS] 机器人 {bot_id} 未绑定有效参考音频，将回落默认参考音频")
+    #             continue
+    #
+    #         if bot_id in self.bot_reference_audios:
+    #             logger.warning(f"[MimoTTS] 机器人 {bot_id} 的参考音频配置重复，将使用最后一项")
+    #         self.bot_reference_audios[bot_id] = audio_info
+    #
+    #     if self.bot_reference_audios:
+    #         logger.info(f"[MimoTTS] 已加载 {len(self.bot_reference_audios)} 个机器人专属参考音频")
 
     async def initialize(self):
         logger.info("[MimoTTS] 插件初始化中...")
