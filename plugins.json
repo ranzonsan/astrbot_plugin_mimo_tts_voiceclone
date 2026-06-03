@@ -1,0 +1,9 @@
+{
+  "astrbot_plugin_mimo_tts_voiceclone": {
+    "display_name": "小米MimoTTS音色复制",
+    "desc": "",
+    "author": "QingchenWait,Ranzon",
+    "repo": "https://github.com/ranzonsan/astrbot_plugin_mimo_tts_voiceclone",
+    "tags": [
+    ]
+  },
