@@ -19,7 +19,7 @@ PLUGIN_NAME = "astrbot_plugin_mimo_tts_voiceclone"
     PLUGIN_NAME,
     "AstrBot Plugin Developer",
     "基于小米 Mimo-v2.5-tts-voiceclone 的声音克隆 TTS 插件",
-    "v1.2.4",
+    "v1.2.7",
 )
 class MimoTTSVoiceClonePlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
