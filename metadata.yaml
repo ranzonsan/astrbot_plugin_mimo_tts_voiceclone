@@ -1,7 +1,7 @@
 name: astrbot_plugin_mimo_tts_voiceclone
 display_name: Mimo TTS 声音克隆
 desc: 基于小米 Mimo-v2.5-tts-voiceclone 的声音克隆 TTS 插件。支持用户上传参考音频进行声音克隆，支持为多个机器人配置不同声音
-version: v1.2.6
+version: v1.2.7
 author: 青尘工作室
 repo: https://github.com/QingchenWait/astrbot_plugin_mimo_tts_voiceclone
 support_platforms:

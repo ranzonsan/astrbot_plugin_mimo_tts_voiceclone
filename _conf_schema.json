@@ -62,6 +62,12 @@
       }
     }
   },
+  "user_context": {
+    "description": "用户上下文信息",
+    "type": "string",
+    "default": "",
+    "hint": "可选的用户上下文信息字段，插件会将其作为系统提示的一部分发送给 TTS 模型，帮助模型更好地理解生成语音的场景和风格需求。例如可以填写用户的年龄、性别、兴趣等信息，以便生成更符合用户特征的语音输出。"
+  },
   "model_name": {
     "description": "TTS 模型名称",
     "type": "string",

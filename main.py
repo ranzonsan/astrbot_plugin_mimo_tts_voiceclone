@@ -19,7 +19,7 @@ PLUGIN_NAME = "astrbot_plugin_mimo_tts_voiceclone"
     PLUGIN_NAME,
     "AstrBot Plugin Developer",
     "基于小米 Mimo-v2.5-tts-voiceclone 的声音克隆 TTS 插件",
-    "v1.2.4",
+    "v1.2.7",
 )
 class MimoTTSVoiceClonePlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
@@ -29,6 +29,7 @@ class MimoTTSVoiceClonePlugin(Star):
         self.api_key = config.get("api_key", "")
         self.base_url = config.get("base_url", "https://api.xiaomimimo.com/v1")
         self.trigger_probability = config.get("trigger_probability", 0.5)
+        self.user_context = config.get("user_context", "")
         self.model_name = config.get("model_name", "mimo-v2.5-tts-voiceclone")
         self.output_format = config.get("output_format", "wav")
         self.voice_speed = config.get("voice_speed", 1.0)
@@ -300,7 +301,7 @@ class MimoTTSVoiceClonePlugin(Star):
             logger.info("[MimoTTS] 未获取到机器人 ID，使用默认参考音频")
         return self.default_reference_audio
 
-    async def _call_mimo_tts(self, text: str, reference_audio: dict) -> bytes | None:
+    async def _call_mimo_tts(self, text: str, user_context: str, reference_audio: dict) -> bytes | None:
         truncated_text = self._truncate_text(text)
         url = f"{self.base_url.rstrip('/')}/chat/completions"
 
@@ -410,7 +411,7 @@ class MimoTTSVoiceClonePlugin(Star):
         # logger.info(f"[MimoTTS] ====== 开始声音克隆转换 ======")
         # logger.info(f"[MimoTTS] 原始文本: {text_content[:200]}...")
 
-        audio_data = await self._call_mimo_tts(text_content, reference_audio)
+        audio_data = await self._call_mimo_tts(text_content, self.user_context, reference_audio)
 
         if audio_data:
             temp_file = await self._save_audio_to_temp_file(audio_data)
