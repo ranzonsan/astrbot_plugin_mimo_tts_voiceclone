@@ -25,7 +25,7 @@
   "reference_audio_base64": {
     "type": "text",
     "description": "默认参考声音文件(base64)",
-    "default": "",
+    "default": [],
     "hint": "机器人使用的默认参考音频。支持 WAV、MP3、FLAC、OGG 格式，需将音频文件使用base64编码。"
   },
   "bot_reference_audio_files": {
