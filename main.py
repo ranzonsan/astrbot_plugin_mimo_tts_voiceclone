@@ -417,9 +417,10 @@ class MimoTTSVoiceClonePlugin(Star):
             temp_file = await self._save_audio_to_temp_file(audio_data)
             if temp_file:
                 result.chain.clear()
+                result.chain.append(Plain(text=text_content))
                 result.chain.append(Record(file=temp_file, url=temp_file))
                 # logger.info("[MimoTTS] ====== 声音克隆转换完成 ======")
-                logger.info("[MimoTTS] 声音克隆转换完成，已将文字回复替换为语音")
+                logger.info("[MimoTTS] 声音克隆转换完成，添加语音回复")
             else:
                 logger.warning("[MimoTTS] 保存音频文件失败，保留原始文字回复")
         else:
