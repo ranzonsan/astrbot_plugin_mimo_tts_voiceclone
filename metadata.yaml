@@ -6,3 +6,4 @@ author: 青尘工作室
 repo: https://github.com/QingchenWait/astrbot_plugin_mimo_tts_voiceclone
 support_platforms:
   - aiocqhttp
+  - telegram
